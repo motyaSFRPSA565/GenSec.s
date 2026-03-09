@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENSEC.s — ЧОП №1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Narrow', 'Courier New', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
+            color: #111;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Шапка */
+        .header {
+            background: white;
+            border: 3px solid #0044ff;
+            box-shadow: 0 0 20px #0044ff88, 0 0 0 2px #ff2222 inset;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo h1 {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 5px;
+        }
+
+        .logo h1 span:first-child {
+            color: #0044ff;
+            text-shadow: 2px 2px 0 #ff2222;
+        }
+
+        .logo h1 span:last-child {
+            color: #ff2222;
+            text-shadow: 2px 2px 0 #0044ff;
+        }
+
+        .badge {
+            background: #0044ff;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            border: 2px solid #ff2222;
+            text-transform: uppercase;
+        }
+
+        /* Навигация */
+        .nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0044ff;
+            border-top: 2px solid #ff2222;
+            padding: 10px;
+            background: white;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: white;
+            border: 2px solid #0044ff;
+            color: #0044ff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .nav-btn.active {
+            background: #0044ff;
+            color: white;
+            border-color: #ff2222;
+        }
+
+        .nav-btn:hover {
+            background: #0044ff;
+            color: white;
+        }
+
+        /* Скидка */
+        .discount-banner {
+            background: linear-gradient(90deg, #0044ff, #ff2222);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border: 2px solid white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Страницы */
+        .page {
+            display: none;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        /* Сетка тарифов */
+        .tariff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tariff-card {
+            background: white;
+            border: 2px solid #0044ff;
+            padding: 20px;
+            box-shadow: 0 0 15px #0044ff88, 0 0 0 1px #ff2222 inset;
+        }
+
+        .tariff-card h3 {
+            color: #0044ff;
+            font-size: 28px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ff2222;
+            padding-bottom: 10px;
+        }
+
+        .tariff-price {
+            background: #f0f4ff;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid #0044ff;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .price-label {
+            font-weight: bold;
+            color: #ff2222;
+        }
+
+        .features {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        .features li:before {
+            content: "✓";
+            color: #0044ff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            border: 2px solid #0044ff;
+            color: #0044ff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 15px;
+        }
+
+        .buy-btn:hover {
+            background: #0044ff;
+            color: white;
+            border-color: #ff2222;
+        }
+
+        .info-section {
+            background: white;
+            border: 2px solid #0044ff;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .info-section h2 {
+            color: #0044ff;
+            font-size: 32px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff2222;
+            padding-bottom: 10px;
+        }
+
+        .info-section p {
+            color: #333;
+            line-height: 1.6;
+            margin: 15px 0;
+            font-size: 18px;
+        }
+
+        .founder {
+            background: #f0f4ff;
+            border-left: 5px solid #ff2222;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            border: 2px solid #ff2222;
+            color: #ff2222;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            margin: 10px;
+        }
+
+        .contact-btn:hover {
+            background: #ff2222;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 2px solid #0044ff;
+            border-bottom: 2px solid #ff2222;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <h1><span>GEN</span><span>SEC.s</span></h1>
+            <div style="color: #666; margin-top: 5px;">ЧАСТНОЕ ОХРАННОЕ ПРЕДПРИЯТИЕ</div>
+        </div>
+        <div class="badge">
+            ОСНОВАТЕЛЬ: МАЙК МАЛАС
+        </div>
+    </div>
+
+    <div class="nav">
+        <button class="nav-btn active" onclick="switchPage('personal')">🛡️ ЛИЧНАЯ ОХРАНА</button>
+        <button class="nav-btn" onclick="switchPage('business')">🏢 ОХРАНА ПРЕДПРИЯТИЙ</button>
+        <button class="nav-btn" onclick="switchPage('transport')">🚗 ТРАНСПОРТ</button>
+        <button class="nav-btn" onclick="switchPage('about')">ℹ️ О НАС</button>
+        <button class="nav-btn" onclick="switchPage('join')">🤝 ПРИСОЕДИНИТЬСЯ</button>
+    </div>
+
+    <div class="discount-banner">
+        ⚡ СЛУЖАЩИМ ФБР / ЦРУ / ПРАВИТЕЛЬСТВА — СКИДКА 80% ⚡
+    </div>
+
+    <!-- ЛИЧНАЯ ОХРАНА -->
+    <div id="page-personal" class="page active-page">
+        <div class="tariff-grid">
+            <!-- Базовый -->
+            <div class="tariff-card">
+                <h3>БАЗОВЫЙ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 10 000$</div>
+                    <div class="price-row"><span class="price-label">МЕСЯЦ:</span> 100$</div>
+                </div>
+                <ul class="features">
+                    <li>Кнопка вызова базовой охраны</li>
+                    <li>Кибербезопасность</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Пакет + -->
+            <div class="tariff-card">
+                <h3>ПАКЕТ +</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 20 000$</div>
+                    <div class="price-row"><span class="price-label">МЕСЯЦ:</span> 500$</div>
+                </div>
+                <ul class="features">
+                    <li>Кнопка вызова базовой охраны</li>
+                    <li>Личное сопровождение</li>
+                    <li>Кибербезопасность</li>
+                    <li>Особые замки GENSEC с 5-кратной аутентификацией</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Ультра -->
+            <div class="tariff-card">
+                <h3>УЛЬТРА</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 50 000$</div>
+                    <div class="price-row"><span class="price-label">МЕСЯЦ:</span> 1 000$</div>
+                </div>
+                <ul class="features">
+                    <li>Кнопка вызова базовой охраны</li>
+                    <li>Личное сопровождение</li>
+                    <li>Кибербезопасность</li>
+                    <li>Особые замки GENSEC с 5-кратной аутентификацией</li>
+                    <li>Кодовые замки</li>
+                    <li>Вызов тактического отряда</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Премиум -->
+            <div class="tariff-card">
+                <h3>ПРЕМИУМ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 100 000$</div>
+                    <div class="price-row"><span class="price-label">МЕСЯЦ:</span> 25 000$</div>
+                </div>
+                <ul class="features">
+                    <li>Кнопка вызова базовой охраны</li>
+                    <li>Личное сопровождение</li>
+                    <li>Кибербезопасность</li>
+                    <li>Особые замки GENSEC с 5-кратной аутентификацией</li>
+                    <li>Кодовые замки</li>
+                    <li>Вызов тактического отряда</li>
+                    <li>Вызов тяжёлого отряда SWAT GENSEC</li>
+                    <li>Особый телохранитель</li>
+                    <li>Отряд щитоносцев (по вызову)</li>
+                    <li>Моментальная защита при попытке взлома</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОХРАНА ПРЕДПРИЯТИЙ -->
+    <div id="page-business" class="page">
+        <div class="tariff-grid">
+            <!-- Базовый -->
+            <div class="tariff-card">
+                <h3>БАЗОВЫЙ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 1 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 50$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 100$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Кодовые замки на двери</li>
+                    <li>Камеры видеонаблюдения</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Пакет + -->
+            <div class="tariff-card">
+                <h3>ПАКЕТ +</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 5 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 150$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 800$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Кодовые замки на двери</li>
+                    <li>Камеры видеонаблюдения</li>
+                    <li>Базовая охрана</li>
+                    <li>5-кратная система замков</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Ультра -->
+            <div class="tariff-card">
+                <h3>УЛЬТРА</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 20 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 2 000$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 5 000$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Кодовые замки на двери</li>
+                    <li>Камеры видеонаблюдения</li>
+                    <li>Базовая охрана</li>
+                    <li>5-кратная система замков</li>
+                    <li>Еженедельная проверка персонала</li>
+                    <li>Киберзащита данных предприятия</li>
+                    <li>Ограда с системой умного дома</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Премиум -->
+            <div class="tariff-card">
+                <h3>ПРЕМИУМ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 80 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 9 000$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 40 000$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Всё из пакета УЛЬТРА</li>
+                    <li>Патруль из SWAT GENSEC</li>
+                    <li>Охрана у входа</li>
+                    <li>Суперзащита и трёхкратное шифрование</li>
+                    <li>🍦 Мороженое любого вкуса каждые два дня</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ТРАНСПОРТНОЕ СОПРОВОЖДЕНИЕ -->
+    <div id="page-transport" class="page">
+        <div class="tariff-grid">
+            <!-- Базовый -->
+            <div class="tariff-card">
+                <h3>БАЗОВЫЙ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 1 200$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 10$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 500$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Одна машина сзади</li>
+                    <li>2 человека: водитель + охранник</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Пакет + -->
+            <div class="tariff-card">
+                <h3>ПАКЕТ +</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 5 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 100$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 1 500$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Две машины (спереди и сзади)</li>
+                    <li>По 3 человека в каждой</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Ультра -->
+            <div class="tariff-card">
+                <h3>УЛЬТРА</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 25 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 3 000$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 9 000$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>Две бронированные машины</li>
+                    <li>По 4 человека в каждой</li>
+                    <li>Вызов базовой охраны</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+
+            <!-- Премиум -->
+            <div class="tariff-card">
+                <h3>ПРЕМИУМ</h3>
+                <div class="tariff-price">
+                    <div class="price-row"><span class="price-label">НАВСЕГДА:</span> 50 000$</div>
+                    <div class="price-row"><span class="price-label">ОБСЛУЖИВАНИЕ:</span> 10 000$/мес</div>
+                    <div class="price-row"><span class="price-label">АРЕНДА:</span> 30 000$/мес</div>
+                </div>
+                <ul class="features">
+                    <li>4 бронированные машины (со всех сторон)</li>
+                    <li>По 5 человек в каждой</li>
+                    <li>Вызов SWAT GENSEC</li>
+                    <li>Личный водитель + 2 охранника в вашу машину</li>
+                    <li>Конвой не виден на картах трафика</li>
+                    <li>Противоминная система</li>
+                </ul>
+                <button class="buy-btn">ПРИОБРЕСТИ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- О НАС -->
+    <div id="page-about" class="page">
+        <div class="info-section">
+            <h2>О КОМПАНИИ GENSEC</h2>
+            <div class="founder">
+                <h3 style="color: #ff2222; margin-bottom: 10px;">ОСНОВАТЕЛЬ: МАЙК МАЛАС</h3>
+                <p>Директор ФБР и губернатор штата Сан-Андреас лично контролирует качество услуг. Каждый сотрудник GENSEC проходит спецподготовку на базе ФБР.</p>
+            </div>
+            <p><strong style="color: #0044ff;">GENSEC.s</strong> — элитное частное охранное предприятие, созданное для защиты граждан, бизнеса и правительственных структур от любых угроз. Наши сотрудники — бывшие агенты ФБР, спецназа и ветераны.</p>
+            <p>Мы гарантируем:</p>
+            <ul style="margin-left: 20px; color: #333;">
+                <li>✅ Круглосуточную охрану</li>
+                <li>✅ Современное вооружение и технику</li>
+                <li>✅ Быстрое реагирование (до 3 минут)</li>
+                <li>✅ Полную конфиденциальность</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ПРИСОЕДИНИТЬСЯ -->
+    <div id="page-join" class="page">
+        <div class="info-section">
+            <h2>ПРИСОЕДИНЯЙТЕСЬ К GENSEC</h2>
+            <p style="font-size: 20px;">Мы всегда ищем профессионалов!</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
+                <div style="border: 2px solid #0044ff; padding: 20px;">
+                    <h3 style="color: #0044ff;">ОХРАННИКИ</h3>
+                    <p>Опыт работы, лицензия, оружие</p>
+                    <p>З/п от 5 000$</p>
+                </div>
+                <div style="border: 2px solid #ff2222; padding: 20px;">
+                    <h3 style="color: #ff2222;">ТЕЛОХРАНИТЕЛИ</h3>
+                    <p>Спецподготовка, работа с VIP</p>
+                    <p>З/п от 10 000$</p>
+                </div>
+                <div style="border: 2px solid #0044ff; padding: 20px;">
+                    <h3 style="color: #0044ff;">КИБЕРСПЕЦИАЛИСТЫ</h3>
+                    <p>Защита данных, антихакер</p>
+                    <p>З/п от 8 000$</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="contact-btn">📞 СВЯЗАТЬСЯ С НАМИ</button>
+                <button class="contact-btn">📱 НАШ TELEGRAM</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        GENSEC.s — ЧАСТНОЕ ОХРАННОЕ ПРЕДПРИЯТИЕ | Сан-Андреас, Сан-Фиерро | Лицензия ФБР №2026-0847
+    </div>
+
+    <script>
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById('page-' + page).classList.add('active-page');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
