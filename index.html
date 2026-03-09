@@ -19,7 +19,6 @@
             padding: 20px;
         }
 
-        /* Шапка */
         .header {
             background: white;
             border: 3px solid #0044ff;
@@ -58,7 +57,6 @@
             text-transform: uppercase;
         }
 
-        /* Навигация */
         .nav {
             display: flex;
             gap: 10px;
@@ -81,7 +79,7 @@
             cursor: pointer;
             transition: 0.2s;
             flex: 1;
-            min-width: 150px;
+            min-width: 140px;
         }
 
         .nav-btn.active {
@@ -95,7 +93,6 @@
             color: white;
         }
 
-        /* Скидка */
         .discount-banner {
             background: linear-gradient(90deg, #0044ff, #ff2222);
             color: white;
@@ -109,7 +106,6 @@
             letter-spacing: 2px;
         }
 
-        /* Страницы */
         .page {
             display: none;
         }
@@ -118,7 +114,6 @@
             display: block;
         }
 
-        /* Сетка тарифов */
         .tariff-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -255,6 +250,90 @@
             border-bottom: 2px solid #ff2222;
             color: #666;
         }
+
+        /* Модальные окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border: 3px solid #0044ff;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 30px #0044ff;
+        }
+
+        .modal-content h2 {
+            color: #0044ff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #0044ff;
+            font-size: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .modal-btn.primary {
+            background: #0044ff;
+        }
+
+        .modal-btn.danger {
+            background: #ff2222;
+        }
+
+        .modal-btn.success {
+            background: #00aa00;
+        }
+
+        .order-text {
+            background: #f0f4ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #ff2222;
+            white-space: pre-wrap;
+            color: #333;
+        }
+
+        .telegram-link {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -269,11 +348,12 @@
     </div>
 
     <div class="nav">
-        <button class="nav-btn active" onclick="switchPage('personal')">🛡️ ЛИЧНАЯ ОХРАНА</button>
-        <button class="nav-btn" onclick="switchPage('business')">🏢 ОХРАНА ПРЕДПРИЯТИЙ</button>
+        <button class="nav-btn active" onclick="switchPage('personal')">🛡️ ЛИЧНАЯ</button>
+        <button class="nav-btn" onclick="switchPage('business')">🏢 ОХРАНА</button>
         <button class="nav-btn" onclick="switchPage('transport')">🚗 ТРАНСПОРТ</button>
         <button class="nav-btn" onclick="switchPage('about')">ℹ️ О НАС</button>
         <button class="nav-btn" onclick="switchPage('join')">🤝 ПРИСОЕДИНИТЬСЯ</button>
+        <button class="nav-btn" onclick="openSecretTab()">🔐 GENSEC.VS</button>
     </div>
 
     <div class="discount-banner">
@@ -283,7 +363,6 @@
     <!-- ЛИЧНАЯ ОХРАНА -->
     <div id="page-personal" class="page active-page">
         <div class="tariff-grid">
-            <!-- Базовый -->
             <div class="tariff-card">
                 <h3>БАЗОВЫЙ</h3>
                 <div class="tariff-price">
@@ -294,10 +373,8 @@
                     <li>Кнопка вызова базовой охраны</li>
                     <li>Кибербезопасность</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('БАЗОВЫЙ', 'личная охрана')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Пакет + -->
             <div class="tariff-card">
                 <h3>ПАКЕТ +</h3>
                 <div class="tariff-price">
@@ -310,10 +387,8 @@
                     <li>Кибербезопасность</li>
                     <li>Особые замки GENSEC с 5-кратной аутентификацией</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПАКЕТ +', 'личная охрана')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Ультра -->
             <div class="tariff-card">
                 <h3>УЛЬТРА</h3>
                 <div class="tariff-price">
@@ -328,10 +403,8 @@
                     <li>Кодовые замки</li>
                     <li>Вызов тактического отряда</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('УЛЬТРА', 'личная охрана')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Премиум -->
             <div class="tariff-card">
                 <h3>ПРЕМИУМ</h3>
                 <div class="tariff-price">
@@ -339,18 +412,13 @@
                     <div class="price-row"><span class="price-label">МЕСЯЦ:</span> 25 000$</div>
                 </div>
                 <ul class="features">
-                    <li>Кнопка вызова базовой охраны</li>
-                    <li>Личное сопровождение</li>
-                    <li>Кибербезопасность</li>
-                    <li>Особые замки GENSEC с 5-кратной аутентификацией</li>
-                    <li>Кодовые замки</li>
-                    <li>Вызов тактического отряда</li>
+                    <li>Всё из пакета УЛЬТРА</li>
                     <li>Вызов тяжёлого отряда SWAT GENSEC</li>
                     <li>Особый телохранитель</li>
                     <li>Отряд щитоносцев (по вызову)</li>
                     <li>Моментальная защита при попытке взлома</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПРЕМИУМ', 'личная охрана')">ПРИОБРЕСТИ</button>
             </div>
         </div>
     </div>
@@ -358,7 +426,6 @@
     <!-- ОХРАНА ПРЕДПРИЯТИЙ -->
     <div id="page-business" class="page">
         <div class="tariff-grid">
-            <!-- Базовый -->
             <div class="tariff-card">
                 <h3>БАЗОВЫЙ</h3>
                 <div class="tariff-price">
@@ -370,10 +437,8 @@
                     <li>Кодовые замки на двери</li>
                     <li>Камеры видеонаблюдения</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('БАЗОВЫЙ', 'охрана предприятий')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Пакет + -->
             <div class="tariff-card">
                 <h3>ПАКЕТ +</h3>
                 <div class="tariff-price">
@@ -387,10 +452,8 @@
                     <li>Базовая охрана</li>
                     <li>5-кратная система замков</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПАКЕТ +', 'охрана предприятий')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Ультра -->
             <div class="tariff-card">
                 <h3>УЛЬТРА</h3>
                 <div class="tariff-price">
@@ -399,18 +462,13 @@
                     <div class="price-row"><span class="price-label">АРЕНДА:</span> 5 000$/мес</div>
                 </div>
                 <ul class="features">
-                    <li>Кодовые замки на двери</li>
-                    <li>Камеры видеонаблюдения</li>
-                    <li>Базовая охрана</li>
-                    <li>5-кратная система замков</li>
+                    <li>Всё из пакета +</li>
                     <li>Еженедельная проверка персонала</li>
                     <li>Киберзащита данных предприятия</li>
                     <li>Ограда с системой умного дома</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('УЛЬТРА', 'охрана предприятий')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Премиум -->
             <div class="tariff-card">
                 <h3>ПРЕМИУМ</h3>
                 <div class="tariff-price">
@@ -425,7 +483,7 @@
                     <li>Суперзащита и трёхкратное шифрование</li>
                     <li>🍦 Мороженое любого вкуса каждые два дня</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПРЕМИУМ', 'охрана предприятий')">ПРИОБРЕСТИ</button>
             </div>
         </div>
     </div>
@@ -433,7 +491,6 @@
     <!-- ТРАНСПОРТНОЕ СОПРОВОЖДЕНИЕ -->
     <div id="page-transport" class="page">
         <div class="tariff-grid">
-            <!-- Базовый -->
             <div class="tariff-card">
                 <h3>БАЗОВЫЙ</h3>
                 <div class="tariff-price">
@@ -445,10 +502,8 @@
                     <li>Одна машина сзади</li>
                     <li>2 человека: водитель + охранник</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('БАЗОВЫЙ', 'транспорт')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Пакет + -->
             <div class="tariff-card">
                 <h3>ПАКЕТ +</h3>
                 <div class="tariff-price">
@@ -460,10 +515,8 @@
                     <li>Две машины (спереди и сзади)</li>
                     <li>По 3 человека в каждой</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПАКЕТ +', 'транспорт')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Ультра -->
             <div class="tariff-card">
                 <h3>УЛЬТРА</h3>
                 <div class="tariff-price">
@@ -476,10 +529,8 @@
                     <li>По 4 человека в каждой</li>
                     <li>Вызов базовой охраны</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('УЛЬТРА', 'транспорт')">ПРИОБРЕСТИ</button>
             </div>
-
-            <!-- Премиум -->
             <div class="tariff-card">
                 <h3>ПРЕМИУМ</h3>
                 <div class="tariff-price">
@@ -495,7 +546,7 @@
                     <li>Конвой не виден на картах трафика</li>
                     <li>Противоминная система</li>
                 </ul>
-                <button class="buy-btn">ПРИОБРЕСТИ</button>
+                <button class="buy-btn" onclick="openOrderForm('ПРЕМИУМ', 'транспорт')">ПРИОБРЕСТИ</button>
             </div>
         </div>
     </div>
@@ -509,7 +560,6 @@
                 <p>Директор ФБР и губернатор штата Сан-Андреас лично контролирует качество услуг. Каждый сотрудник GENSEC проходит спецподготовку на базе ФБР.</p>
             </div>
             <p><strong style="color: #0044ff;">GENSEC.s</strong> — элитное частное охранное предприятие, созданное для защиты граждан, бизнеса и правительственных структур от любых угроз. Наши сотрудники — бывшие агенты ФБР, спецназа и ветераны.</p>
-            <p>Мы гарантируем:</p>
             <ul style="margin-left: 20px; color: #333;">
                 <li>✅ Круглосуточную охрану</li>
                 <li>✅ Современное вооружение и технику</li>
@@ -544,8 +594,8 @@
             </div>
 
             <div style="text-align: center;">
-                <button class="contact-btn">📞 СВЯЗАТЬСЯ С НАМИ</button>
-                <button class="contact-btn">📱 НАШ TELEGRAM</button>
+                <button class="contact-btn" onclick="alert('📞 Свяжитесь с нами в Telegram')">📞 СВЯЗАТЬСЯ</button>
+                <a href="https://t.me/+iJxRfD7UBgc3MzMy" target="_blank" class="contact-btn">📱 НАШ TELEGRAM</a>
             </div>
         </div>
     </div>
@@ -555,12 +605,139 @@
     </div>
 
     <script>
+        // Переключение страниц
         function switchPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById('page-' + page).classList.add('active-page');
             
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+        }
+
+        // Открытие формы заказа
+        function openOrderForm(tariffName, tariffType) {
+            const modalHtml = `
+                <div class="modal-overlay" id="orderModal">
+                    <div class="modal-content">
+                        <h2>ОФОРМЛЕНИЕ ЗАКАЗА</h2>
+                        <p style="color: #ff2222; margin-bottom: 20px;">Тариф: ${tariffName} (${tariffType})</p>
+                        
+                        <input type="text" id="orderName" placeholder="Имя персонажа">
+                        <input type="text" id="orderPassword" placeholder="Пароль">
+                        <input type="text" id="orderAccount" placeholder="Номер счёта">
+                        
+                        <div class="modal-buttons">
+                            <button class="modal-btn primary" onclick="generateOrder('${tariffName}', '${tariffType}')">ДАЛЕЕ</button>
+                            <button class="modal-btn danger" onclick="closeModal()">ОТМЕНА</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Генерация заказа
+        function generateOrder(tariffName, tariffType) {
+            const name = document.getElementById('orderName').value;
+            const password = document.getElementById('orderPassword').value;
+            const account = document.getElementById('orderAccount').value;
+            
+            if (!name || !password || !account) {
+                alert('❌ Заполните все поля!');
+                return;
+            }
+            
+            const orderText = `✅ ЗАЯВКА НА УСЛУГУ GENSEC\n\nТариф: ${tariffName} (${tariffType})\nИмя: ${name}\nПароль: ${password}\nСчёт: ${account}\n\n📋 Скопируйте этот текст и отправьте в наш Telegram`;
+            
+            closeModal();
+            
+            const resultHtml = `
+                <div class="modal-overlay" id="resultModal">
+                    <div class="modal-content">
+                        <h2>ГОТОВО!</h2>
+                        <div class="order-text">${orderText.replace(/\n/g, '<br>')}</div>
+                        
+                        <button class="modal-btn primary" onclick="copyToClipboard('${orderText.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')">📋 СКОПИРОВАТЬ</button>
+                        
+                        <a href="https://t.me/+iJxRfD7UBgc3MzMy" target="_blank" class="telegram-link">📱 ПЕРЕЙТИ В TELEGRAM</a>
+                        
+                        <button class="modal-btn danger" onclick="closeModal()">ЗАКРЫТЬ</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', resultHtml);
+        }
+
+        // Копирование в буфер
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Текст скопирован! Отправьте его в Telegram');
+            });
+        }
+
+        // Открытие секретной вкладки
+        function openSecretTab() {
+            const modalHtml = `
+                <div class="modal-overlay" id="secretModal">
+                    <div class="modal-content">
+                        <h2>🔐 ВВЕДИТЕ ПАРОЛЬ</h2>
+                        
+                        <input type="password" id="secretPassword" placeholder="Пароль доступа">
+                        
+                        <div class="modal-buttons">
+                            <button class="modal-btn primary" onclick="checkSecretPassword()">ВОЙТИ</button>
+                            <button class="modal-btn danger" onclick="closeModal()">ОТМЕНА</button>
+                        </div>
+                        
+                        <p style="color: #666; text-align: center; margin-top: 20px;">Пароль: GenSec5652025</p>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Проверка пароля
+        function checkSecretPassword() {
+            const password = document.getElementById('secretPassword').value;
+            
+            if (password === 'GenSec5652025') {
+                closeModal();
+                
+                const resultHtml = `
+                    <div class="modal-overlay" id="secretResult">
+                        <div class="modal-content">
+                            <h2>✅ ДОСТУП РАЗРЕШЁН</h2>
+                            
+                            <p style="margin: 20px 0;">🔗 ССЫЛКА НА GENSEC.vs:</p>
+                            <div style="background: #f0f4ff; padding: 15px; word-break: break-all;">
+                                https://motyasfrpsa565.github.io/GENSEC-vs/
+                            </div>
+                            
+                            <div class="modal-buttons">
+                                <button class="modal-btn primary" onclick="window.open('https://motyasfrpsa565.github.io/GENSEC-vs/', '_blank')">🌐 ПЕРЕЙТИ</button>
+                                <button class="modal-btn success" onclick="copyToClipboard('https://motyasfrpsa565.github.io/GENSEC-vs/')">📋 СКОПИРОВАТЬ</button>
+                                <button class="modal-btn danger" onclick="closeModal()">ЗАКРЫТЬ</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', resultHtml);
+            } else {
+                alert('❌ Неверный пароль!');
+            }
+        }
+
+        // Закрытие модальных окон
+        function closeModal() {
+            const modals = document.querySelectorAll('.modal-overlay');
+            modals.forEach(modal => modal.remove());
+        }
+
+        // Закрытие по клику вне окна
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeModal();
+            }
         }
     </script>
 </body>
